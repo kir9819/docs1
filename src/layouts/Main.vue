@@ -1,7 +1,7 @@
 <template>
 <v-app>
   <v-container>
-    <v-btn href="/Docs1">Home</v-btn>
+    <v-btn href="/docs1">Home</v-btn>
     <slot></slot>
   </v-container>
 </v-app>
