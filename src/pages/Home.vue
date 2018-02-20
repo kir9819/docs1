@@ -41,7 +41,7 @@
   import MainLayout from '../layouts/Main.vue'
   import VueMarkdown from 'vue-markdown'
   
-  const apiURL = 'https://api.github.com/repos/kir9819/Docs/contents/js/'
+  const apiURL = 'https://api.github.com/repos/kir9819/template/contents/d/'
 
   function b64DecodeUnicode(str) {
     return decodeURIComponent(atob(str).split('').map(function(c) {
@@ -66,6 +66,7 @@
       VueMarkdown
     },
     mounted () {
+      console.log("home");
       fetch(apiURL)
         .then(res => res.json())
         .then(data => {
@@ -96,7 +97,6 @@
     },
     methods: {            
       showDoc(doc) {
-        console.log(name);
         this.dialog = true;
         this.text = doc.textname;
         this.md = doc.text;

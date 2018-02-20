@@ -1,3 +1,3 @@
 export default {
-  '/': 'Home'
+  '/docs1': 'Home'
 }
