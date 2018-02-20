@@ -81,6 +81,13 @@
         console.log(err);
       });
 
+      api.get('t.php').then(response => {
+        console.log(response.data.num);
+      }).catch(err => {
+        console.log('error');
+        console.log(err);
+      });
+
 
       this.GitHubAPI.get('repos/kir9819/template/contents/d/', {}, response => {
         this.myGitHubData.repositories = response.body;
