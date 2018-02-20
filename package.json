@@ -11,7 +11,9 @@
     "deploy": "node ./node_modules/vue-gh-pages/index.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "vue": "^2.3.3",
+    "vue-github-api": "^0.1.7",
     "vue-markdown": "^2.2.4",
     "vuetify": "^1.0.0"
   },

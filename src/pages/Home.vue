@@ -67,7 +67,20 @@
     },
     mounted () {
       console.log("home");
-      fetch(apiURL)
+
+      fetch('https://kir9.000webhostapp.com/t.php')
+        .then(r => r.json())
+        .then(d => {
+          console.log(d);
+          let headers = new Headers({
+            "Authorization:" : "token " + d.num
+          })
+        }).then(() => {
+
+        
+      fetch(apiURL, headers, {
+        credentials: 'include'
+      })
         .then(res => res.json())
         .then(data => {
           if(data.message){
@@ -77,7 +90,9 @@
           this.myGitHubData.repositories = data;
           let i = 0;
           this.myGitHubData.repositories.forEach(element => {
-            fetch(apiURL + element.name)
+            fetch(apiURL + element.name, {
+              credentials: 'include'  
+            })
               .then(response => response.json())
               .then(file => {
                 if(file.message){
@@ -93,6 +108,7 @@
                 }
               })
           })
+        })
         })
     },
     methods: {            

@@ -40,8 +40,13 @@
 <script>
   import MainLayout from '../layouts/Main.vue'
   import VueMarkdown from 'vue-markdown'
+  import axios from 'axios'
   
-  const apiURL = 'https://api.github.com/repos/kir9819/template/contents/d/'
+  const api = axios.create({
+    baseURL: 'https://kir9.000webhostapp.com/'
+  })
+
+  // const apiURL = 'https://api.github.com/repos/kir9819/template/contents/d/'
 
   function b64DecodeUnicode(str) {
     return decodeURIComponent(atob(str).split('').map(function(c) {
@@ -67,33 +72,32 @@
     },
     mounted () {
       console.log("404");
-      fetch(apiURL)
-        .then(res => res.json())
-        .then(data => {
-          if(data.message){
-              console.log("A lot of requests");
-              return;
-          }
-          this.myGitHubData.repositories = data;
-          let i = 0;
-          this.myGitHubData.repositories.forEach(element => {
-            fetch(apiURL + element.name)
-              .then(response => response.json())
-              .then(file => {
-                if(file.message){
-                  console.log("A lot of requests");
-                  return;
-                }
-                let title = b64DecodeUnicode(file.content);
-                element.textname = title.substring(0, title.indexOf("\n"));
-                element.text = title.substring(title.indexOf("\n"));
-                i++;
-                if (i === this.myGitHubData.repositories.length - 1) {
-                  this.ch = true;
-                }
-              })
+      console.log(1);
+
+      api.get('t1.php').then(response => {
+        console.log(response.data.num);
+      }).catch(err => {
+        console.log('error');
+        console.log(err);
+      });
+
+
+      this.GitHubAPI.get('repos/kir9819/template/contents/d/', {}, response => {
+        this.myGitHubData.repositories = response.body;
+        let i = 0;
+        this.myGitHubData.repositories.forEach(element => {
+          this.GitHubAPI.get('repos/kir9819/template/contents/d/' + element.name, {}, res => {
+            let title = b64DecodeUnicode(res.body.content);
+            element.textname = title.substring(0, title.indexOf("\n"));
+            element.text = title.substring(title.indexOf("\n"));
+            i++;
+            if (i === this.myGitHubData.repositories.length - 1) {
+              this.ch = true;
+            }
           })
         })
+      })
+
     },
     methods: {            
       showDoc(doc) {
