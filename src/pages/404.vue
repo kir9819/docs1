@@ -1,31 +1,46 @@
 <template>
   <main-layout>
     <v-content>
-      <div v-if="Docs">
+      <v-container v-if="Docs">
         <div v-for="doc in Docs" v-bind:key="doc.sha">
-          <div v-if="doc.name.substring(0,4) === '[ru]'">
-            <vue-markdown :source="doc.textname"></vue-markdown>
-            <div 
-              v-for="doc1 in Docs" 
+          <div v-for="doc1 in Docs" v-bind:key="doc1.sha"
               v-if="doc1.name.substring(4) === doc.name.substring(4) 
-                && doc1.name.substring(0,4) === '[en]'"
-                v-bind:key="doc1.sha"
-            >{{ doc1.textname }}
-            <button @click="showDoc(doc1)">Open</button></div>
-            <button @click="showDoc(doc)">Открыть</button>
+              && doc1.name.substring(0,4) === '[en]'">
+          <v-card v-if="doc.name.substring(0,4) === '[ru]'">
+            <v-card-text>{{doc.textname}}</v-card-text>
+              <v-subheader>{{ doc1.textname }}</v-subheader>
+              <v-btn outline color="indigo" @click="showDoc(doc1)">Open</v-btn>
+              <v-btn outline color="indigo" @click="showDoc(doc)">Открыть</v-btn>
+          </v-card>
           </div>
         </div>
-      </div>        
+      </v-container>        
       <v-layout row justify-center>
-        <v-dialog v-model="dialog" >
+        <v-dialog 
+          v-model="dialog" 
+          fullscreen
+          transition="dialog-left-transition"
+          :overlay="false"
+          scrollable
+          v-on:keyup.esc="dialog=false"
+          >
           <v-card>
+            <v-toolbar card dark color="primary">
+              <v-btn icon @click.native="dialog = false" dark>
+                <v-icon>close</v-icon>
+              </v-btn>
+              <v-toolbar-title>{{text}}</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-toolbar-items>
+                <v-btn
+                  @click="changeLang(lang)"
+                  dark
+                  flat
+                >{{ lang }}</v-btn>
+              </v-toolbar-items>
+            </v-toolbar>
             <v-card-title>
-              <h1>{{ text }}</h1>
-              <v-btn
-                @click="changeLang(lang)"
-                color="green darken-1"
-                flat="flat"
-              >{{ lang }}</v-btn>
+              <h1>{{ text }}</h1>              
             </v-card-title>
             <v-card-text>
               <vue-markdown :source="md"></vue-markdown>
@@ -40,13 +55,6 @@
 <script>
   import MainLayout from '../layouts/Main.vue'
   import VueMarkdown from 'vue-markdown'
-  import axios from 'axios'
-  
-  const api = axios.create({
-    baseURL: 'https://kir9.000webhostapp.com/'
-  })
-
-  // const apiURL = 'https://api.github.com/repos/kir9819/template/contents/d/'
 
   function b64DecodeUnicode(str) {
     return decodeURIComponent(atob(str).split('').map(function(c) {
@@ -72,22 +80,6 @@
     },
     mounted () {
       console.log("404");
-      console.log(1);
-
-      api.get('t1.php').then(response => {
-        console.log(response.data.num);
-      }).catch(err => {
-        console.log('error');
-        console.log(err);
-      });
-
-      api.get('t.php').then(response => {
-        console.log(response.data.num);
-      }).catch(err => {
-        console.log('error');
-        console.log(err);
-      });
-
 
       this.GitHubAPI.get('repos/kir9819/template/contents/d/', {}, response => {
         this.myGitHubData.repositories = response.body;

@@ -18,7 +18,7 @@
 </script>
 
 <style scoped>
-  .container {
+  /* .container {
     max-width: 600px;
     margin: 0 auto;
     padding: 15px 30px;
@@ -27,5 +27,5 @@
   }
   img {
     width: 100% !important;
-  }
+  } */
 </style>

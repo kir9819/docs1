@@ -40,8 +40,6 @@
 <script>
   import MainLayout from '../layouts/Main.vue'
   import VueMarkdown from 'vue-markdown'
-  
-  const apiURL = 'https://api.github.com/repos/kir9819/template/contents/d/'
 
   function b64DecodeUnicode(str) {
     return decodeURIComponent(atob(str).split('').map(function(c) {
@@ -68,48 +66,22 @@
     mounted () {
       console.log("home");
 
-      fetch('https://kir9.000webhostapp.com/t.php')
-        .then(r => r.json())
-        .then(d => {
-          console.log(d);
-          let headers = new Headers({
-            "Authorization:" : "token " + d.num
+      this.GitHubAPI.get('repos/kir9819/template/contents/d/', {}, response => {
+        this.myGitHubData.repositories = response.body;
+        let i = 0;
+        this.myGitHubData.repositories.forEach(element => {
+          this.GitHubAPI.get('repos/kir9819/template/contents/d/' + element.name, {}, res => {
+            let title = b64DecodeUnicode(res.body.content);
+            element.textname = title.substring(0, title.indexOf("\n"));
+            element.text = title.substring(title.indexOf("\n"));
+            i++;
+            if (i === this.myGitHubData.repositories.length - 1) {
+              this.ch = true;
+            }
           })
-        }).then(() => {
-
-        
-      fetch(apiURL, headers, {
-        credentials: 'include'
+        })
       })
-        .then(res => res.json())
-        .then(data => {
-          if(data.message){
-              console.log("A lot of requests");
-              return;
-          }
-          this.myGitHubData.repositories = data;
-          let i = 0;
-          this.myGitHubData.repositories.forEach(element => {
-            fetch(apiURL + element.name, {
-              credentials: 'include'  
-            })
-              .then(response => response.json())
-              .then(file => {
-                if(file.message){
-                  console.log("A lot of requests");
-                  return;
-                }
-                let title = b64DecodeUnicode(file.content);
-                element.textname = title.substring(0, title.indexOf("\n"));
-                element.text = title.substring(title.indexOf("\n"));
-                i++;
-                if (i === this.myGitHubData.repositories.length - 1) {
-                  this.ch = true;
-                }
-              })
-          })
-        })
-        })
+
     },
     methods: {            
       showDoc(doc) {
