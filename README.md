@@ -1,6 +1,11 @@
-# Vue 2.0 Simple Routing Example
+# Existend Docs2
 
-> A simple example of routing with Vue 2.0 without using vue-router. This branch uses the raw HTML5 History API. For an example integrating a 3rd-party routing solution, see the [pagejs branch](https://github.com/chrisvfritz/vue-2.0-simple-routing-example/tree/pagejs).
+## Save options:
+
+- Documents must be in two languages (2 files in repo)
+- Name of documents must start with "[ru]" or "[en]" (depends on language)
+- Text after square brackets should be the same regardless of language
+- **AND** first string in each document is its name. It's different for each file, you don't need to write any symbols except name
 
 ## Build Setup
 
@@ -15,4 +20,3 @@ npm run dev
 npm run build
 ```
 
-For a detailed explanation of the build process, read the [docs for vue-loader](http://vuejs.github.io/vue-loader).

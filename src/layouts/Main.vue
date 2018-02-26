@@ -1,7 +1,7 @@
 <template>
 <v-app>
   <v-container>
-    <v-btn href="/docs1">Home</v-btn>
+    <p class="text-xs-center display-2">EXISTEND DOCS</p>
     <slot></slot>
   </v-container>
 </v-app>
@@ -17,15 +17,3 @@
   }
 </script>
 
-<style scoped>
-  /* .container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 15px 30px;
-    background: #f9f7f5;
-
-  }
-  img {
-    width: 100% !important;
-  } */
-</style>
