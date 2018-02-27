@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import VueResource from 'vue-resource'
+import router from './router'
 import routes from './routes'
 import GitHubAPI from 'vue-github-api'
+import Main from './layouts/Main'
+
 import 'vuetify/dist/vuetify.min.css'
 
 const t1 = "070b2",
@@ -20,23 +23,26 @@ Vue.use(Vuetify)
 
 const app = new Vue({
   el: '#app',
-  data: {
-    currentRoute: window.location.pathname
-  },
-  computed: {
-    ViewComponent () {
-      const matchingView = routes[this.currentRoute]
-      console.log(window.location);
-      return matchingView
-        ? require('./pages/' + matchingView + '.vue')
-        : require('./pages/404.vue')
-    }
-  },
-  render (h) {
-    return h(this.ViewComponent)
-  }
+  router,
+  components: { Main },
+  template: '<Main/>'
+  // data: {
+  //   currentRoute: window.location.pathname
+  // },
+  // computed: {
+  //   ViewComponent () {
+  //     const matchingView = routes[this.currentRoute]
+  //     console.log(window.location);
+  //     return matchingView
+  //       ? require('./pages/' + matchingView + '.vue')
+  //       : require('./pages/404.vue')
+  //   }
+  // },
+  // render (h) {
+  //   return h(this.ViewComponent)
+  // }
 })
 
-window.addEventListener('popstate', () => {
-  app.currentRoute = window.location.pathname
-})
+// window.addEventListener('popstate', () => {
+//   app.currentRoute = window.location.pathname
+// })

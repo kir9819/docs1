@@ -1,11 +1,14 @@
 <template>
-  <main-layout>
+  <v-content>
     <v-flex class="text-xs-center">
-      <v-progress-linear row wrap align-center
+      <v-progress-linear 
+        row 
+        wrap 
+        align-center
         :indeterminate="true"
         v-show="progress"
         color="teal"
-        ></v-progress-linear>
+      ></v-progress-linear>
     </v-flex>
     <v-content v-if="myGitHubData.length > 0">
       <v-container>
@@ -18,14 +21,14 @@
               prepend-icon="search"
               :append-icon="search.length > 0 ? 'clear' : ''"
               :append-icon-cb="() => search = ''"
-              ></v-text-field>
+            ></v-text-field>
           </v-flex>
           <v-spacer></v-spacer>
           <v-btn
             @click="changeGLang()"
             light
             flat
-            >{{ gLang }}</v-btn>
+          >{{ gLang }}</v-btn>
         </v-layout>
       </v-container>
       <v-list two-line class="elevation-2">
@@ -36,9 +39,9 @@
             v-for="doc in myGitHubData" 
             :key="doc.sha" 
             v-if="doc.name.substring(1,3) === gLang && doc.shows === true"
-            >
+          >
             <v-slide-y-transition>
-              <v-list-tile @click="showDoc(doc)">
+              <v-list-tile @click="showDoc(doc)" >
                 <v-list-tile-content v-text="doc.textname"></v-list-tile-content>
               </v-list-tile>
             </v-slide-y-transition>
@@ -46,46 +49,12 @@
           </v-content>
         </template>
       </v-list>
+                
     </v-content>
-    
-    <v-dialog 
-      v-model="dialog" 
-      fullscreen
-      transition="dialog-bottom-transition"
-      :overlay="false"
-      scrollable
-      @keydown.esc="dialog = false"
-      >
-      <v-card>
-        <v-toolbar card dark color="primary">
-          <v-btn icon @click.native="dialog = false" dark>
-            <v-icon>close</v-icon>
-          </v-btn>
-          <v-toolbar-title>{{ text }}</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-toolbar-items>
-            <v-btn
-              @click="changeLang()"
-              dark
-              flat
-            >{{ lang }}</v-btn>
-          </v-toolbar-items>
-        </v-toolbar>
-        <v-card-text>
-          <v-flex xs12 sm10 offset-sm1 class="hidden-md-and-up">
-            <h2>{{ text }}</h2>
-          </v-flex>
-          <v-flex xs12 sm10 md8 offset-sm1 offset-md2>
-            <vue-markdown class="markdown-body" :source="md"></vue-markdown>
-          </v-flex>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-  </main-layout>
+  </v-content>
 </template>
 
 <script>
-  import MainLayout from '../layouts/Main.vue'
   import VueMarkdown from 'vue-markdown'
 
   const url = 'repos/existend/exi-docs2/contents/files/'
@@ -97,6 +66,7 @@
   }
 
   export default {
+    name: 'Home',
     data () {
       return {
         myGitHubData: [],
@@ -110,37 +80,98 @@
         progress: true,
         pLoad: true,
         pSearch: false
-      }        
+      }
     },
     components: {
-      MainLayout,
+      // MainLayout,
       VueMarkdown
     },
     mounted () {
+      for (let i = 0; i < localStorage.length; i++) {
+        let n = localStorage.key(i);
+        if(n.substring(0,4) === '[ru]' || n.substring(0,4) === '[en]'){
+          let item = JSON.parse(localStorage.getItem(n));
+          if (item.textname && item.text && item.sha && item.shows) {
+            this.myGitHubData.push(item);
+          }
+          // this.progress = false;
+          if (n.substring(1,3) === this.gLang) {
+            this.pLoad = false;
+          }
+        }
+      }
       this.GitHubAPI.get(url, {}, response => {
+        let i = 0;
         response.body.forEach(element => {
-          this.GitHubAPI.get(url + element.name, {}, res => {
-            let title = b64DecodeUnicode(res.body.content);
-            element.textname = title.substring(0, title.indexOf("\n"));
-            element.shows = true;
-            element.text = title.substring(title.indexOf("\n"));
+          if (i === response.body.length - 1) {
             this.progress = false;
-            if(element.name.substring(1,3) === this.gLang) {
-              this.pLoad = false;
+          }
+          let flag = false;
+          i++;
+          this.myGitHubData.forEach(el => {
+            if(el.name === element.name) {
+              if (el.sha === element.sha) {
+                flag = true;
+              } 
+              else {
+                this.GitHubAPI.get(url + el.name, {}, res => {
+                  console.log(1);
+                  let title = b64DecodeUnicode(res.body.content);
+                  el.textname = title.substring(0, title.indexOf("\n"));
+                  el.text = title.substring(title.indexOf("\n"));
+                  el.sha = res.body.sha;
+                  el.shows = true;
+                  if(el.name.substring(1,3) === this.gLang) {
+                    this.pLoad = false;
+                  }
+                  if(localStorage.getItem(el.name)) {
+                    console.log('name'); 
+                    localStorage.removeItem(el.name);
+                  }
+                  localStorage.setItem(el.name, JSON.stringify(el));
+                  // this.myGitHubData.push(element);
+                  flag = true;
+                }, err => {
+                  
+                })
+              }
             }
-            this.myGitHubData.push(element);
-          })
-        })
-      })
+            
+          });
+          if(!flag) {
+            this.GitHubAPI.get(url + element.name, {}, res => {
+              let title = b64DecodeUnicode(res.body.content);
+              element.textname = title.substring(0, title.indexOf("\n"));
+              element.text = title.substring(title.indexOf("\n"));
+              element.sha = res.body.sha;
+              element.shows = true;
+              if(element.name.substring(1,3) === this.gLang) {
+                this.pLoad = false;
+              }
+              if(localStorage.getItem(element.name)) { localStorage.removeItem(element.name) }
+              localStorage.setItem(element.name, JSON.stringify(element));
+              this.myGitHubData.push(element);
+            }, err => {
 
+            })
+          }
+        })
+      }, err => {
+
+      })
     },
     methods: {            
       showDoc(doc) {
-        this.text = doc.textname;
-        this.md = doc.text;
-        this.name = doc.name;
-        this.lang = this.name.substring(1,3) === 'ru' ? 'ru' : 'en';
-        this.dialog = true;
+        // localStorage.setItem(doc.name, JSON.stringify({
+        //   text: doc.textname,
+        //   md: doc.text
+        // }))
+        this.$router.push({name: 'Doc', params: {name : doc.name.substring(0, doc.name.length - 3)}})
+        // this.text = doc.textname;
+        // this.md = doc.text;
+        // this.name = doc.name;
+        // this.lang = this.name.substring(1,3) === 'ru' ? 'ru' : 'en';
+        // this.dialog = true;
       },
       changeLang() {
         let l = this.lang === 'ru' ? 'en' : 'ru';
@@ -189,4 +220,8 @@
     }
   }
 </script>
+
+<style scoped>
+
+</style>
 
