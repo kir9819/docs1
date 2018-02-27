@@ -49,8 +49,41 @@
           </v-content>
         </template>
       </v-list>
-                
     </v-content>
+    <v-dialog 
+      v-model="dialog" 
+      fullscreen
+      transition="dialog-bottom-transition"
+      :overlay="false"
+      scrollable
+      @keydown.esc="dialog = false"
+      id="dialog"
+    >
+      <v-card>
+        <v-toolbar card dark color="primary">
+          <v-btn icon @click.native="dialog = false" dark>
+            <v-icon>close</v-icon>
+          </v-btn>
+          <v-toolbar-title>{{ text }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn
+              @click="changeLang()"
+              dark
+              flat
+            >{{ lang }}</v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-card-text>
+          <v-flex xs12 sm10 offset-sm1 class="hidden-md-and-up">
+            <p class="title">{{ text }}</p>
+          </v-flex>
+          <v-flex xs12 sm10 md8 offset-sm1 offset-md2>
+            <vue-markdown class="markdown-body" :source="md"></vue-markdown>
+          </v-flex>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-content>
 </template>
 
@@ -87,6 +120,7 @@
       VueMarkdown
     },
     mounted () {
+      console.log(this.$route.params);
       for (let i = 0; i < localStorage.length; i++) {
         let n = localStorage.key(i);
         if(n.substring(0,4) === '[ru]' || n.substring(0,4) === '[en]'){
@@ -166,12 +200,13 @@
         //   text: doc.textname,
         //   md: doc.text
         // }))
-        this.$router.push({name: 'Doc', params: {name : doc.name.substring(0, doc.name.length - 3)}})
-        // this.text = doc.textname;
-        // this.md = doc.text;
-        // this.name = doc.name;
-        // this.lang = this.name.substring(1,3) === 'ru' ? 'ru' : 'en';
-        // this.dialog = true;
+        // this.$router.push({name: 'Doc', params: {name : doc.name.substring(0, doc.name.length - 3)}})
+        this.text = doc.textname;
+        this.md = doc.text;
+        this.name = doc.name;
+        this.lang = this.name.substring(1,3) === 'ru' ? 'ru' : 'en';
+        this.dialog = true;
+        document.body.scrollTop;
       },
       changeLang() {
         let l = this.lang === 'ru' ? 'en' : 'ru';
