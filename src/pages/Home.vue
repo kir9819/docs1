@@ -13,7 +13,7 @@
     <v-content v-if="myGitHubData.length > 0">
       <v-container>
         <v-layout row wrap>
-          <v-flex xs8 sm5>
+          <v-flex xs10 sm5>
             <v-text-field 
               v-model="search" 
               :label="searchText"
@@ -24,7 +24,7 @@
             ></v-text-field>
           </v-flex>
           <v-spacer></v-spacer>
-          <v-flex xs8 sm4>
+          <v-flex xs10 sm4>
             <v-select
               :items="tags"
               :label="searchTagText"
