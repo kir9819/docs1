@@ -15,11 +15,6 @@ export default new router({
       component: Home
     },
     {
-      path: '/docs1#:name',
-      name: 'Doc',
-      component: Doc
-    },
-    {
       path: '/docs1*',
       component: Err404
     }
