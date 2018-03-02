@@ -20,7 +20,7 @@ export default {
     console.log(this.$route.params);
     console.log(window.location.search.substring(9));
     if (window.location.search) {
-      this.$router.push({name: 'Doc', params: {name : '[ru]' + window.location.search.substring(9)}})
+      this.$router.replace({name: 'Doc', params: {name : '[ru]' + window.location.search.substring(9)}})
     }
   }
 }
