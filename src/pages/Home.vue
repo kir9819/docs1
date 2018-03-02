@@ -175,9 +175,6 @@
       VueMarkdown
     },
     mounted () {
-      console.log(window.location);
-      console.log(this.$route.params);
-      console.log(window.location.search.substring(9));
       // проверка всех элементов локального хранилища
       for (let i = 0; i < localStorage.length; i++) {
         let LSelement = localStorage.key(i);
@@ -368,7 +365,8 @@
     },
     methods: {
       // функция показа документа, присваиваем глобальным переменным нужные
-      // значения и открываем окно диалога        
+      // значения и открываем окно диалога
+      // CHANGED открываем вкладку с документом
       showDoc(doc) {
         this.$router.push({name: 'Doc', params: {name : doc.name.substring(0, doc.name.length - 3)}});
         // this.text = doc.textname;

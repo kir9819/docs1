@@ -67,9 +67,6 @@
       VueMarkdown
     },
     mounted() {
-      console.log(window.location);
-      console.log(this.$route.params);
-      console.log(window.location.search.substring(9));
       document.body.scrollTop;
       this.name = this.$route.params.name + '.md';
       let l = this.name.substring(1,3) === 'ru' ? 'en' : 'ru';
@@ -97,7 +94,7 @@
             self.sec -= 1;
           }, 1000);
           setTimeout(function() { 
-            self.$router.push('/');
+            self.$router.push('/docs1');
           }, 10000);
         })
       }

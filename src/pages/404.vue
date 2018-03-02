@@ -18,11 +18,8 @@ export default {
     }
   },
   mounted () {
-    console.log(window.location);
-    console.log(this.$route.params);
-    console.log(window.location.search.substring(9));
     if (window.location.search) {
-      this.$router.replace({name: 'Doc', params: {name : '[ru]' + window.location.search.substring(9)}})
+      this.$router.replace({name: 'Doc', params: {name : '[' + window.location.search.substring(4,6) +']' + window.location.search.substring(9)}})
     }
   }
 }
