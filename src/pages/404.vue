@@ -13,7 +13,9 @@
 <script>
 export default {
   data () {
-
+    return {
+      doc:''
+    }
   },
   mounted () {
     console.log(window.location);
