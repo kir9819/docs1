@@ -10,17 +10,17 @@ export default new router({
   mode: 'history',
   routes: [
     {
-      path: '/',
+      path: '/docs1',
       name: 'Home',
       component: Home
     },
     {
-      path: '/@:name',
+      path: '/doc1@:name',
       name: 'Doc',
       component: Doc
     },
     {
-      path: '/*',
+      path: '/docs1*',
       component: Err404
     }
   ]
