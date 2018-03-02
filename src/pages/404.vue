@@ -18,6 +18,10 @@ export default {
   mounted () {
     console.log(window.location);
     console.log(this.$route.params);
+    console.log(window.location.search);
+    if (window.location.search) {
+      this.$router.push({name: 'Doc', params: {name : window.location.search}})
+    }
   }
 }
 </script>

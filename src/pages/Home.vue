@@ -177,6 +177,7 @@
     mounted () {
       console.log(window.location);
       console.log(this.$route.params);
+      console.log(window.location.search);
       // проверка всех элементов локального хранилища
       for (let i = 0; i < localStorage.length; i++) {
         let LSelement = localStorage.key(i);
