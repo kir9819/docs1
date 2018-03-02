@@ -10,12 +10,12 @@ export default new router({
   mode: 'history',
   routes: [
     {
-      path: '/docs1',
+      path: '/docs',
       name: 'Home',
       component: Home
     },
     {
-      path: '/doc1@:name',
+      path: '/docs/doc?:name',
       name: 'Doc',
       component: Doc
     },
