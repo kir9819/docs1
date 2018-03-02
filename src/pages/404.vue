@@ -10,3 +10,14 @@
   </v-container>
 </template>
 
+<script>
+export default {
+  data () {
+
+  },
+  mounted () {
+    console.log(window.location);
+    console.log(this.$route.params);
+  }
+}
+</script>

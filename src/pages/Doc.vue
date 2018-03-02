@@ -67,6 +67,7 @@
       VueMarkdown
     },
     mounted() {
+      console.log(window.location);
       console.log(this.$route.params);
       document.body.scrollTop;
       this.name = this.$route.params.name + '.md';
