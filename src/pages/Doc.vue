@@ -67,6 +67,7 @@
       VueMarkdown
     },
     mounted() {
+      console.log(this.$route.params);
       document.body.scrollTop;
       this.name = this.$route.params.name + '.md';
       let l = this.name.substring(1,3) === 'ru' ? 'en' : 'ru';

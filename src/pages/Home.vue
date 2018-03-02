@@ -128,7 +128,7 @@
             >{{ lang }}</v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-card-text>
+        <v-card-text id="md">
           <v-flex xs12 sm10 offset-sm1 class="hidden-md-and-up">
             <p class="title">{{ text }}</p>
           </v-flex>
@@ -367,11 +367,13 @@
       // функция показа документа, присваиваем глобальным переменным нужные
       // значения и открываем окно диалога        
       showDoc(doc) {
-        this.text = doc.textname;
-        this.md = doc.text;
-        this.name = doc.name;
-        this.lang = this.name.substring(1,3) === 'ru' ? 'ru' : 'en';
-        this.dialog = true;
+        this.$router.push({name: 'Doc', params: {name : doc.name.substring(0, doc.name.length - 3)}});
+        // this.text = doc.textname;
+        // this.md = doc.text;
+        // this.name = doc.name;
+        // this.lang = this.name.substring(1,3) === 'ru' ? 'ru' : 'en';
+        // this.dialog = true;
+        // document.getElementById('md').scrollTop = 0;
       },
       // смена языка документа (при просмотре документа)
       changeLang() {
